@@ -117,5 +117,6 @@ public class CuerpoCeleste {
 	public boolean intersecta(CuerpoCeleste obj){
 		return getPerimetro().intersects(obj.getPerimetro());
 	}
+        
 	
 }
