@@ -70,7 +70,7 @@ public class Planeta extends CuerpoCeleste {
     }
 
     /**
-     * Method that changes the position of planet depending on mouse moven
+     * Method that changes the position of planet depending on mouse move
      * if dragged.
      * @param e contains the mouse event dragged.
      */
