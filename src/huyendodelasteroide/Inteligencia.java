@@ -56,6 +56,8 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
     private int asteroidScoreDeduction = 20;
     private int asteroidsFallenCounter = 0;
 
+    private boolean illegalCollision; 
+    
     /**
      * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
      * En este metodo se inizializan las variables o se crean los objetos a
@@ -93,6 +95,7 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
         lives = new ImageIcon(live_image);
 
         object_clicked = false;
+        illegalCollision = false; 
     }
 
     /**
@@ -175,6 +178,8 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
                         //incremento el puntaje y la velocidad
                         score += asteroidScoreBonus;
                     } else {
+                        //If collision is from any other size
+                        //Dont allow for the trespassing of the planet perimeter with the asteroid.
                         object_clicked = false;
                     }
 
