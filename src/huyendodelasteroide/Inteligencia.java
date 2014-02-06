@@ -40,6 +40,7 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
     private Image explosion;
     private Graphics dbg;	// Objeto grafico
     private AudioClip bomb;    //Objeto AudioClip 
+    private AudioClip bottom;    //Objeto AudioClip 
     private Planeta jupiter;    // Objeto de la clase Planeta
     private Asteroide asteroid;    //Objeto de la clase Asteroide
     private int speed; //contains the speed of the asteroid
@@ -88,6 +89,8 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
         //Se cargan los sonidos.
         URL baURL = this.getClass().getResource("/sounds/8-bit-explosion.wav");
         bomb = getAudioClip(baURL);
+        URL botURL = this.getClass().getResource("/sounds/Explosion.wav");
+        bottom = getAudioClip(baURL);
         URL goURL = this.getClass().getResource("/images/gameover_1.jpg");
         gameover = Toolkit.getDefaultToolkit().getImage(goURL);
         URL livesURL = this.getClass().getResource("/images/whiterectangle.gif");
@@ -137,8 +140,8 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
     }
 
     /**
-     * Metodo usado para actualizar la posicion de objetos elefante y asteroid.
-     *
+     * Metodo usado para actualizar posiciones objetos.
+     * Aquí se actualizan posiciones de objetos.
      */
     public void actualiza() {
 
@@ -149,17 +152,27 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
     }
 
     /**
-     * Metodo usado para checar las colisiones del objeto elefante y asteroid
-     * con las orillas del <code>Applet</code>.
+     * Metodo usado para checar las colisiones del objeto jupiter y asteroid
+     * con las orillas del <code>Applet</code> y entre ellos. 
+     * Después de preguntarle al profesor, acordamos que al colisionar por otro lado
+     * que no es abajo con un asteroide, el planeta puede seguirse moviendo. En este
+     * caso se puede transpasar el asteroide, y solamente en el caso de que ya haya llegado
+     * completamente al otro lado, podrá tener una colisión válida con el asteroide. 
      */
     public void checaColision() {
+        /**
+         * Para cada asteroide en mi lista modifico su estado colisión si está en colisión
+         * Reviso si hay colisión con el applet para modificar marcador en caso de que sea necesario
+         * Checo si hay colisión con Jupiter por abajo. 
+         */
         for (Asteroide asteroid : misAsteroides) {
+            //si ya está en colisión
             if (asteroid.isIn_collision() && asteroid.getCollisionCyclesCounter() > 0) {
                 asteroid.decreaseCollisionCyclesCounter();
             } else {
                 //check collision with applet bottom
                 if (asteroid.getPosY() > getHeight() - asteroid.getAlto() && !asteroid.isIn_collision()) {
-                    bomb.play();
+                    bottom.play();
                     asteroid.collide();
                     if (vidas > 0) {
                         asteroidsFallenCounter++;
@@ -169,30 +182,33 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
                             asteroidsFallenCounter = 0;
                         }
                         score -= asteroidScoreDeduction;
-                    }
+                    }//checo colisón con jupiter
                 } else if (jupiter.intersecta(asteroid) && !asteroid.isIn_collision()) {
-                    int displacement = asteroid.getPosX() - jupiter.getPosX();
+                    int displacement = asteroid.getPosX() - jupiter.getPosX(); //diferencia de las xs de planeta y asteroide
+                    //si el choque fue por debajo
                     if (asteroid.getPosY() < jupiter.getPosY()) {
+                        //si el choque fue de lleno (ninguna parte del asteroide está fuera de la pantalla)
                         if (displacement > -5 && displacement < jupiter.getAncho() - asteroid.getAncho() + 5) {
+                            //si no está en una colisión ilegal.
                             if (!illegalCollision) {
                                 bomb.play();    //sonido al colisionar
                                 asteroid.collide();
                                 //incremento el puntaje y la velocidad
                                 score += asteroidScoreBonus;
-                            }else{
-                                illegalCollision = false; 
+                            } else {
+                                illegalCollision = false;
                             }
-                        }
-                    }else if(jupiter.intersectsInner(asteroid)){
+                        }// Si jupiter transpasó al asteroide. Es una colisión ilegal.
+                    } else if (jupiter.intersectsInner(asteroid)) {
                         //jupiter has entered from an invalid point of the asteroid
                         //it is now in an invalid collision
-                        illegalCollision = true; 
+                        illegalCollision = true;
                     }
 
                 } else if (asteroid.getCollisionCyclesCounter() <= 0 && asteroid.isIn_collision()) {
                     asteroid.stopCollision();
 
-                    //El asteroide se mueve al azar en la mitad derecha del appler.
+                    //El asteroide se mueve al azar en la parte 0 de y.
                     asteroid.setPosX((int) (Math.random() * getWidth()));
                     if (asteroid.getPosX() > getWidth() - asteroid.getAncho()) {
                         //correct displacement out of screen
@@ -205,6 +221,8 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
             }
         }
 
+        //Checo colisión con paredes del planeta jupiter.
+        //Si colisiona, se deja de draggear el planeta.
         int bounceoff = 5;
         //checks planet collision with applet
         if (jupiter.getPosX() <= 0 || jupiter.getPosY() <= 0
@@ -291,6 +309,11 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
         }
     }
 
+    /**
+     * Metodo que me permite crear un asteroide para meter en mi lista de asteroides.
+     * @return un objeto de tipo asteroide en una posición random en y -200 para abajo y 
+     * en posición random en x de todo el <code>Applet</code>
+     */
     public Asteroide crearAsteroide() {
         //randomly position asteroid at the top of the screen
         int posrX = (int) (Math.random() * getWidth());
@@ -303,7 +326,13 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
         }
         return newAsteroid;
     }
-
+    
+    /**
+     * Creo una lista con entre lower y upper número de Asteroides
+     * @param lower número mínimo de asteroides en la lista.
+     * @param upper número máximo de asteroides en la lista. 
+     * @return una lista encadenada de tipo Asteroide con r random Asteroid list. 
+     */
     public LinkedList<Asteroide> generateRandomAsteroidList(int lower, int upper) {
         int R = (int) (Math.random() * (upper - lower)) + lower;
         LinkedList<Asteroide> asteroides = new LinkedList<Asteroide>();
