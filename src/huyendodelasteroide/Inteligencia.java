@@ -56,8 +56,8 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
     private int asteroidScoreDeduction = 20;
     private int asteroidsFallenCounter = 0;
 
-    private boolean illegalCollision; 
-    
+    private boolean illegalCollision;
+
     /**
      * Metodo <I>init</I> sobrescrito de la clase <code>Applet</code>.<P>
      * En este metodo se inizializan las variables o se crean los objetos a
@@ -95,7 +95,7 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
         lives = new ImageIcon(live_image);
 
         object_clicked = false;
-        illegalCollision = false; 
+        illegalCollision = false;
     }
 
     /**
@@ -172,15 +172,21 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
                     }
                 } else if (jupiter.intersecta(asteroid) && !asteroid.isIn_collision()) {
                     int displacement = asteroid.getPosX() - jupiter.getPosX();
-                    if (asteroid.getPosY() < jupiter.getPosY() && displacement > -5 && displacement < (jupiter.getAncho() - asteroid.getAncho() + 5)) {
-                        bomb.play();    //sonido al colisionar
-                        asteroid.collide();
-                        //incremento el puntaje y la velocidad
-                        score += asteroidScoreBonus;
-                    } else {
-                        //If collision is from any other size
-                        //Dont allow for the trespassing of the planet perimeter with the asteroid.
-                        object_clicked = false;
+                    if (asteroid.getPosY() < jupiter.getPosY()) {
+                        if (displacement > -5 && displacement < jupiter.getAncho() - asteroid.getAncho() + 5) {
+                            if (!illegalCollision) {
+                                bomb.play();    //sonido al colisionar
+                                asteroid.collide();
+                                //incremento el puntaje y la velocidad
+                                score += asteroidScoreBonus;
+                            }else{
+                                illegalCollision = false; 
+                            }
+                        }
+                    }else if(jupiter.intersectsInner(asteroid)){
+                        //jupiter has entered from an invalid point of the asteroid
+                        //it is now in an invalid collision
+                        illegalCollision = true; 
                     }
 
                 } else if (asteroid.getCollisionCyclesCounter() <= 0 && asteroid.isIn_collision()) {
@@ -198,31 +204,29 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
 
             }
         }
-        
+
         int bounceoff = 5;
         //checks planet collision with applet
-        if(jupiter.getPosX()<=0 || jupiter.getPosY()<=0 ||
-           jupiter.getPosX()>=(getWidth()-jupiter.getAncho())||
-           jupiter.getPosY()>=getHeight()-jupiter.getAlto()
-          ){
-            if(object_clicked){
+        if (jupiter.getPosX() <= 0 || jupiter.getPosY() <= 0
+                || jupiter.getPosX() >= (getWidth() - jupiter.getAncho())
+                || jupiter.getPosY() >= getHeight() - jupiter.getAlto()) {
+            if (object_clicked) {
                 object_clicked = false;
             }
-            if(jupiter.getPosX()<=0){
-                jupiter.setPosX(jupiter.getPosX()+bounceoff);
+            if (jupiter.getPosX() <= 0) {
+                jupiter.setPosX(jupiter.getPosX() + bounceoff);
             }
-            if(jupiter.getPosX()>=(getWidth()-jupiter.getAncho())){
-                jupiter.setPosX(jupiter.getPosX()-bounceoff);
+            if (jupiter.getPosX() >= (getWidth() - jupiter.getAncho())) {
+                jupiter.setPosX(jupiter.getPosX() - bounceoff);
             }
-            if(jupiter.getPosY()<=0){
-                jupiter.setPosY(jupiter.getPosY()+bounceoff);
+            if (jupiter.getPosY() <= 0) {
+                jupiter.setPosY(jupiter.getPosY() + bounceoff);
             }
-            if(jupiter.getPosY()>=(getHeight()-jupiter.getAlto())){
-                jupiter.setPosY(jupiter.getPosY()-bounceoff);
+            if (jupiter.getPosY() >= (getHeight() - jupiter.getAlto())) {
+                jupiter.setPosY(jupiter.getPosY() - bounceoff);
             }
         }
     }
-    
 
     /**
      * Metodo <I>update</I> sobrescrito de la clase <code>Applet</code>,
@@ -269,9 +273,8 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
                 for (int i = 0; i < vidas; i++) {
                     g.drawImage(lives.getImage(), text_length + i * lives.getIconWidth(), 0, this);
                 }
-                String scoreString = "puntaje: "+score; 
-                g.drawString(scoreString, getWidth()-150, 15);
-                
+                String scoreString = "puntaje: " + score;
+                g.drawString(scoreString, getWidth() - 150, 15);
 
                 g.drawImage(jupiter.getImagenI(), jupiter.getPosX(), jupiter.getPosY(), this);
 
@@ -291,7 +294,7 @@ public class Inteligencia extends Applet implements Runnable, MouseListener, Mou
     public Asteroide crearAsteroide() {
         //randomly position asteroid at the top of the screen
         int posrX = (int) (Math.random() * getWidth());
-        int posrY = (int) (Math.random() * -200) ;
+        int posrY = (int) (Math.random() * -200);
 
         Asteroide newAsteroid = new Asteroide(posrX, posrY, Toolkit.getDefaultToolkit().getImage(rURL));
         if (newAsteroid.getPosX() > getWidth() - newAsteroid.getAncho()) {

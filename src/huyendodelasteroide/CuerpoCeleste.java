@@ -1,6 +1,7 @@
-package huyendodelasteroide; 
+package huyendodelasteroide;
+
 /**
- * Clase Animal 
+ * Clase Animal
  *
  * @author Antonio Mejorado
  * @version 1.00 2008/6/13
@@ -10,113 +11,143 @@ import java.awt.Image;
 import java.awt.Rectangle;
 
 public class CuerpoCeleste {
-	
-	private int posX;    //posicion en x.       
-	private int posY;	//posicion en y.
-	private ImageIcon icono;    //icono.
-	
-	/**
-	 * Metodo constructor usado para crear el objeto
-	 * @param posX es la <code>posicion en x</code> del objeto.
-	 * @param posY es la <code>posicion en y</code> del objeto.
-	 * @param image es la <code>imagen</code> del objeto.
-	 */
-	public CuerpoCeleste(int posX, int posY ,Image image) {
-		this.posX=posX;
-		this.posY=posY;
-		icono = new ImageIcon(image);
-	}
-	
-	/**
-	 * Metodo modificador usado para cambiar la posicion en x del objeto 
-	 * @param posX es la <code>posicion en x</code> del objeto.
-	 */
-	public void setPosX(int posX) {
-		this.posX = posX;
-	}
-	
-	/**
-	 * Metodo de acceso que regresa la posicion en x del objeto 
-	 * @return posX es la <code>posicion en x</code> del objeto.
-	 */
-	public int getPosX() {
-		return posX;
-	}
-	
-	/**
-	 * Metodo modificador usado para cambiar la posicion en y del objeto 
-	 * @param posY es la <code>posicion en y</code> del objeto.
-	 */
-	public void setPosY(int posY) {
-		this.posY = posY;
-	}
-	
-	/**
-	 * Metodo de acceso que regresa la posicion en y del objeto 
-	 * @return posY es la <code>posicion en y</code> del objeto.
-	 */
-	public int getPosY() {
-		return posY;
-	}
-	
-	/**
-	 * Metodo modificador usado para cambiar el icono del objeto 
-	 * @param icono es el <code>icono</code> del objeto.
-	 */
-	public void setImageIcon(ImageIcon icono) {
-		this.icono = icono;
-	}
-	
-	/**
-	 * Metodo de acceso que regresa el icono del objeto 
-	 * @return icono es el <code>icono</code> del objeto.
-	 */
-	public ImageIcon getImageIcon() {
-		return icono;
-	}
-	
-	/**
-	 * Metodo de acceso que regresa el ancho del icono 
-	 * @return un objeto de la clase <code>ImageIcon</code> que es el ancho del icono.
-	 */
-	public int getAncho() {
-		return icono.getIconWidth();
-	}
-	
-	/**
-	 * Metodo de acceso que regresa el alto del icono 
-	 * @return un objeto de la clase <code>ImageIcon</code> que es el alto del icono.
-	 */
-	public int getAlto() {
-		return icono.getIconHeight();
-	}
-	
-	/**
-	 * Metodo de acceso que regresa la imagen del icono 
-	 * @return un objeto de la clase <code>Image</code> que es la imagen del icono.
-	 */
-	public Image getImagenI() {
-		return icono.getImage();
-	}
-	
-	/**
-	 * Metodo de acceso que regresa un nuevo rectangulo
-	 * @return un objeto de la clase <code>Rectangle</code> que es el perimetro 
-	 * del rectangulo
-	 */
-	public Rectangle getPerimetro(){
-		return new Rectangle(getPosX(),getPosY(),getAncho(),getAlto());
-	}
-	
-	/**
-	 * Checa si el objeto <code>CuerpoCeleste</code> intersecta a otro <code>CuerpoCeleste</code>
-	 *
-	 * @return un valor boleano <code>true</code> si lo intersecta <code>false</code>
-	 * en caso contrario
-	 */
-	public boolean intersecta(CuerpoCeleste obj){
-		return getPerimetro().intersects(obj.getPerimetro());
-	}
-        
-	
+
+    private int posX;    //posicion en x.       
+    private int posY;	//posicion en y.
+    private ImageIcon icono;    //icono.
+
+    /**
+     * Metodo constructor usado para crear el objeto
+     *
+     * @param posX es la <code>posicion en x</code> del objeto.
+     * @param posY es la <code>posicion en y</code> del objeto.
+     * @param image es la <code>imagen</code> del objeto.
+     */
+    public CuerpoCeleste(int posX, int posY, Image image) {
+        this.posX = posX;
+        this.posY = posY;
+        icono = new ImageIcon(image);
+    }
+
+    /**
+     * Metodo modificador usado para cambiar la posicion en x del objeto
+     *
+     * @param posX es la <code>posicion en x</code> del objeto.
+     */
+    public void setPosX(int posX) {
+        this.posX = posX;
+    }
+
+    /**
+     * Metodo de acceso que regresa la posicion en x del objeto
+     *
+     * @return posX es la <code>posicion en x</code> del objeto.
+     */
+    public int getPosX() {
+        return posX;
+    }
+
+    /**
+     * Metodo modificador usado para cambiar la posicion en y del objeto
+     *
+     * @param posY es la <code>posicion en y</code> del objeto.
+     */
+    public void setPosY(int posY) {
+        this.posY = posY;
+    }
+
+    /**
+     * Metodo de acceso que regresa la posicion en y del objeto
+     *
+     * @return posY es la <code>posicion en y</code> del objeto.
+     */
+    public int getPosY() {
+        return posY;
+    }
+
+    /**
+     * Metodo modificador usado para cambiar el icono del objeto
+     *
+     * @param icono es el <code>icono</code> del objeto.
+     */
+    public void setImageIcon(ImageIcon icono) {
+        this.icono = icono;
+    }
+
+    /**
+     * Metodo de acceso que regresa el icono del objeto
+     *
+     * @return icono es el <code>icono</code> del objeto.
+     */
+    public ImageIcon getImageIcon() {
+        return icono;
+    }
+
+    /**
+     * Metodo de acceso que regresa el ancho del icono
+     *
+     * @return un objeto de la clase <code>ImageIcon</code> que es el ancho del
+     * icono.
+     */
+    public int getAncho() {
+        return icono.getIconWidth();
+    }
+
+    /**
+     * Metodo de acceso que regresa el alto del icono
+     *
+     * @return un objeto de la clase <code>ImageIcon</code> que es el alto del
+     * icono.
+     */
+    public int getAlto() {
+        return icono.getIconHeight();
+    }
+
+    /**
+     * Metodo de acceso que regresa la imagen del icono
+     *
+     * @return un objeto de la clase <code>Image</code> que es la imagen del
+     * icono.
+     */
+    public Image getImagenI() {
+        return icono.getImage();
+    }
+
+    /**
+     * Metodo de acceso que regresa un nuevo rectangulo
+     *
+     * @return un objeto de la clase <code>Rectangle</code> que es el perimetro
+     * del rectangulo
+     */
+    public Rectangle getPerimetro() {
+        return new Rectangle(getPosX(), getPosY(), getAncho(), getAlto());
+    }
+
+    /**
+     * Checa si el objeto <code>CuerpoCeleste</code> intersecta a otro
+     * <code>CuerpoCeleste</code>
+     *
+     * @return un valor boleano <code>true</code> si lo intersecta
+     * <code>false</code> en caso contrario
+     */
+    public boolean intersecta(CuerpoCeleste obj) {
+        return getPerimetro().intersects(obj.getPerimetro());
+    }
+
+    /**
+     * returns a perimeter inside the image icon
+     *
+     * @return a rectangle about half the size of the actual image icon thats inside the image icon
+     */
+    public Rectangle getInnerPerimeter() {
+        return new Rectangle(getPosX() + getAncho() / 4, getPosY() + getAlto() / 4, getAncho() / 2, getAlto() / 2);
+    }
+
+    /**
+     * Checks if there is an intersection with the inner rectangle.
+     */
+    public boolean intersectsInner(CuerpoCeleste obj) {
+        return getInnerPerimeter().intersects(obj.getPerimetro());
+    }
+
 }
